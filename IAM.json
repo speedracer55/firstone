@@ -61,9 +61,9 @@
           "location": "[resourceGroup().location]",
           "properties": {
             "administratorType": "ActiveDirectory",
-            "login": "AdminRole-IT-DBA",
-            "sid": "eb9bbf9c-ed40-4ef0-8f8a-d0e5fe4822a0",
-            "tenantId": "7a40f9b9-9d26-42c4-aedc-3d1830a9f5a2"
+            "login": "AdminRole",
+            "sid": "eb9bbf9c-ed40-",
+            "tenantId": "7a40f9b9-9d26-42c4-a2"
 
           },
           "dependsOn": [
