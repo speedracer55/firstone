@@ -1,0 +1,79 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "app501-iam-qa-idm-sql-01AdminLogin": {
+      "type": "string",
+      "minLength": 1
+    },
+    "app501-iam-qa-idm-sql-01AdminLoginPassword": {
+      "type": "securestring"
+    },
+    "SQLservername": {
+      "type": "string",
+      "defaultValue": "app501-iam-qa-idm-sql-01",
+      "allowedValues": [
+        "app501-iam-qa-idm-sql-01",
+        "app501-iam-qa-ids-sql-01",
+        "app501-iam-qa-fim-sql-01"
+      ],
+      "metadata": {
+        "description": "Choose the name of SQL server"
+      }
+    }
+  },
+  "variables": {
+    
+  },
+  "resources": [
+    {
+      "name": "[parameters('SQLservername')]",
+      "type": "Microsoft.Sql/servers",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2014-04-01-preview",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "app101-iam-prod-idm-sql-01"
+      },
+      "properties": {
+        "administratorLogin": "[parameters('app501-iam-qa-idm-sql-01AdminLogin')]",
+        "administratorLoginPassword": "[parameters('app501-iam-qa-idm-sql-01AdminLoginPassword')]"
+      },
+
+      "resources": [
+        {
+          "name": "AllowAllWindowsAzureIps",
+          "type": "firewallrules",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2014-04-01-preview",
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', parameters('SQLservername'))]"
+          ],
+          "properties": {
+            "startIpAddress": "192.168.1.10",
+            "endIpAddress": "192.168.1.15"
+          }
+        },
+        {
+          "type": "administrators",
+          "name": "activedirectory",
+          "apiVersion": "2014-04-01-preview",
+          "location": "[resourceGroup().location]",
+          "properties": {
+            "administratorType": "ActiveDirectory",
+            "login": "AdminRole-IT-DBA",
+            "sid": "eb9bbf9c-ed40-4ef0-8f8a-d0e5fe4822a0",
+            "tenantId": "7a40f9b9-9d26-42c4-aedc-3d1830a9f5a2"
+
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.sql/servers',parameters('SQLservername'))]"
+          ]
+
+        }
+      ]
+    }
+  ],
+  "outputs": {
+  }
+}
